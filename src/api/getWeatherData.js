@@ -1,12 +1,13 @@
 
 import  Axios  from 'axios';
+import { API_HOST, API_KEY } from '../config';
 const getWeatherData = async (searchData) => {
     const config = {
         method: 'get',
         url: `https://community-open-weather-map.p.rapidapi.com/weather?q=${searchData}`,
         headers: {
-            "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
-            "x-rapidapi-key": "4607821390msh1351d2de9664f2fp1e94e4jsnf5fabbe9678d",
+            "x-rapidapi-host": API_HOST,
+            "x-rapidapi-key": API_KEY,
         }
     };
     

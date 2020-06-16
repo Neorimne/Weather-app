@@ -7,13 +7,8 @@ import Forecast from './Forecast/Forecast';
 
 
 const Content = (props) => {
-    const [isFetching, setIsFetching] = useState(props.searchData.isFetching);
-    const [searchInput, setSearchInput] = useState('');
     
-    useEffect (() => {
-        setIsFetching(props.searchData.isFetching)
-    }, [props.searchData.isFetching]);
-
+    const [searchInput, setSearchInput] = useState('');
     const handleInput = (e) => {
         setSearchInput(e.target.value);
         props.setIsFetching(true);

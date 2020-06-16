@@ -11,7 +11,8 @@ const Forecast = (props) => {
     let Weather = [];
     let data = {}
     if (props.searchResult.data.weather) {
-        Weather = props.searchResult.data.weather.find(item => item.main); //??
+        console.log("Obj",  props.searchResult.data.weather[0]);
+        Weather = props.searchResult.data.weather[0];
         switch (Weather.main) {
             case "Thunderstorm":
             case "Rain":
