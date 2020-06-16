@@ -1,0 +1,85 @@
+
+.forecastWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    color: whitesmoke;
+    .city {
+        text-align: center;
+        font-size: 32px;
+    }
+    .degreesWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .celsius{
+        display: flex;
+        width: 40vw;
+        flex-direction: column;
+        justify-content: flex-start;
+        font-size: 20vw;
+
+        .celsiusDegrees{
+            display: flex;
+            align-items: center;
+            justify-content:  baseline;
+            img {
+                width: 15vw;
+                height: 15vw;
+            }
+        }
+        .feelsLike, .weatherDescr, .wind{
+            font-size: 22px;
+            text-align: start;
+            padding-left: 1vw;
+        }
+    }
+    .weatherImg{
+        text-align: center;
+        width: 30vw;
+        img{
+            width: 20vw;
+            height: 20vw;
+        }
+    }
+}
+
+.visibleBlock {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility ease 0s, opacity ease 1s;
+    transition-delay: 1s;
+}
+.visibleBlockOpen {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility ease 0s, opacity ease 1s;
+}
+
+@media only screen and (max-width: 450px) {
+    .forecastWrapper{
+        .city {
+            font-size: 15px;
+        }
+        .degreesWrapper {
+            flex-direction: column;
+            font-size: 15px;
+        }
+        .feelsLike, .weatherDescr, .wind{
+            font-size: 5px;
+            width: 60vw;
+        }
+        .weatherImg {
+            width: 100vw;
+            margin-top:50px;
+            img{
+                width: 70vw;
+                height: 70vw;
+            }
+        }
+    }
+    
+}
