@@ -7,11 +7,9 @@ import rainLogo from "../../../assets/rain.png";
 import sunLogo from "../../../assets/sun.png";
 
 const Forecast = (props) => {
-    console.log("Props forecast: ", props);
     let Weather = [];
     let data = {}
     if (props.searchResult.data.weather) {
-        console.log("Obj",  props.searchResult.data.weather[0]);
         Weather = props.searchResult.data.weather[0];
         switch (Weather.main) {
             case "Thunderstorm":
