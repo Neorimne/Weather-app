@@ -12,13 +12,12 @@ const getWeatherData = async (searchData) => {
     };
     
     const result = await Axios(config);
-    return{
+    return {
         celsius: Math.round(result.data.main.temp - 273.15),
         feelsLike: Math.round(result.data.main.feels_like - 273.15),
         city: result.data.name,
         weather: result.data.weather,
         wind: result.data.wind.speed
-
     };
 };
 

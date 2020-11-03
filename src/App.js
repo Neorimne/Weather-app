@@ -1,11 +1,10 @@
 import React from 'react';
-import ContentContainer from './components/Content/ContentContainer';
-import store from './redux/store';
+import Content from './components/Content/Content';
 
 function App() {
   return (
     <div className="App">
-      <ContentContainer store={store} /> 
+      <Content /> 
     </div>
   );
 }

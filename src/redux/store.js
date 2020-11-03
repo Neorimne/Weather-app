@@ -1,11 +1,9 @@
-import {combineReducers, createStore, applyMiddleware} from 'redux';
 import searchDataReducer from './searchDataReducer';
-import thunkMiddleware from 'redux-thunk';
 
-const rootReducer = combineReducers({
-    searchData: searchDataReducer
+const { configureStore } = require("@reduxjs/toolkit");
+
+export default configureStore({
+    reducer: {
+        searchData: searchDataReducer
+    }
 });
-
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-export default store;
-

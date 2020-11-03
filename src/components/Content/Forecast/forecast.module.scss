@@ -47,17 +47,6 @@
     }
 }
 
-.visibleBlock {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility ease 0s, opacity ease 1s;
-    transition-delay: 1s;
-}
-.visibleBlockOpen {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility ease 0s, opacity ease 1s;
-}
 
 @media only screen and (max-width: 450px) {
     .forecastWrapper{
