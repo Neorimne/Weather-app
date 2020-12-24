@@ -11,13 +11,13 @@ type DataType = {
 };
 
 export interface IState {
-  data: DataType | null;
+  data: DataType | undefined;
   status: string;
   error: string | undefined;
 }
 
 const initialState: IState = {
-  data: null,
+  data: undefined,
   status: "idle",
   error: undefined,
 };

@@ -1,18 +1,80 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-.App {
-  background: linear-gradient(155deg, #55c7ed, #2bb3e0, #3bc1ed);
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+textarea:focus,
+input:focus {
+  outline: none;
+}
+
+input {
+  border: none;
+  border-bottom: 0.125rem solid var(--omrs-color-ink-medium-contrast);
+  width: 100%;
+  font: 1em sans-serif;
+}
+
+.fullscreen-bg {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  padding-top: 45%;
+}
+
+.fullscreen-bg__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+}
+.overlay {
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+}
+
+@media (max-width: 900px) {
+  .fullscreen-bg {
+    background: url("./assets/background/poster.jpg") center center / cover
+      no-repeat;
+  }
+
+  .fullscreen-bg__video {
+    display: none;
+  }
+
+  .overlay h1 {
+    font-size: 40px;
+  }
+}
+
+@supports (object-fit: cover) {
+  .fullscreen-bg__video {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
