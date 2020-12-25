@@ -1,5 +1,13 @@
 import React from "react";
-import { Box, Divider, IconButton, makeStyles, Paper } from "@material-ui/core";
+import {
+  Box,
+  ClickAwayListener,
+  Divider,
+  IconButton,
+  makeStyles,
+  Paper,
+  Tooltip,
+} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { CitiesDataType } from "../../../redux/citiesReducer";
 
@@ -9,6 +17,8 @@ type SearchFieldPropsType = {
   handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
   clickHandler: () => void;
   onKeyClickHandler: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  tooltipOpen: boolean;
+  TooltipCloseHandler: () => void;
 };
 
 const useStyles = makeStyles({
@@ -42,43 +52,56 @@ const SearchField = ({
   clickHandler,
   cities,
   onKeyClickHandler,
+  tooltipOpen,
+  TooltipCloseHandler,
 }: SearchFieldPropsType) => {
   const classes = useStyles();
   return (
-    <Paper className={classes.root}>
-      <Box className={classes.inputWrapper}>
-        <input
-          placeholder="Search Forecast"
-          className={classes.input}
-          value={value}
-          onChange={handleInput}
-          list={"myInput"}
-          onKeyDown={onKeyClickHandler}
-        ></input>
-        <datalist id="myInput">
-          {cities ? (
-            cities.map((cityItem) => (
-              <option key={cityItem.id}>
-                {cityItem.city}, {cityItem.countryCode}
-              </option>
-            ))
-          ) : (
-            <option></option>
-          )}
-        </datalist>
-      </Box>
-
-      <Divider className={classes.divider} orientation="vertical" />
-      <IconButton
-        type="button"
-        onClick={clickHandler}
-        className={classes.iconButton}
-        aria-label="search"
-        color="primary"
+    <ClickAwayListener onClickAway={TooltipCloseHandler}>
+      <Tooltip
+        title="You should type location here!"
+        arrow
+        open={tooltipOpen}
+        disableFocusListener
+        disableHoverListener
+        disableTouchListener
       >
-        <SearchIcon />
-      </IconButton>
-    </Paper>
+        <Paper className={classes.root}>
+          <Box className={classes.inputWrapper}>
+            <input
+              placeholder="Search Forecast"
+              className={classes.input}
+              value={value}
+              onChange={handleInput}
+              list={"myInput"}
+              onKeyDown={onKeyClickHandler}
+            ></input>
+            <datalist id="myInput">
+              {cities ? (
+                cities.map((cityItem) => (
+                  <option key={cityItem.id}>
+                    {cityItem.city}, {cityItem.countryCode}
+                  </option>
+                ))
+              ) : (
+                <option></option>
+              )}
+            </datalist>
+          </Box>
+
+          <Divider className={classes.divider} orientation="vertical" />
+          <IconButton
+            type="button"
+            onClick={clickHandler}
+            className={classes.iconButton}
+            aria-label="search"
+            color="primary"
+          >
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+      </Tooltip>
+    </ClickAwayListener>
   );
 };
 

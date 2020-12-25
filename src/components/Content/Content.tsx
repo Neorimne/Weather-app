@@ -15,8 +15,8 @@ import { citiesSelector, getCitiesData } from "../../redux/citiesReducer";
 import { Grid, makeStyles, Typography, useTheme } from "@material-ui/core";
 
 const Content = () => {
+  //// Styles
   const theme = useTheme();
-
   const useStyles = makeStyles({
     root: {
       [theme.breakpoints.down("xs")]: {
@@ -53,6 +53,8 @@ const Content = () => {
   const searchResult = useSelector(getSearchData);
   const cities = useSelector(citiesSelector);
 
+  // Weather Icon switch
+
   let WeatherImg: string | undefined;
   if (searchResult.data && searchResult.status === "succeeded") {
     switch (searchResult.data.weather[0].main) {
@@ -85,12 +87,19 @@ const Content = () => {
     }
   }, [searchInput, dispatch]);
 
+  // Transition
+
   const [checked, setChecked] = useState(true);
   useEffect(() => {
     if (searchResult.status === "succeeded") {
       setChecked(true);
     }
   }, [searchResult.status]);
+
+  const [tooltipOpen, setTooltipOpen] = React.useState(false);
+  const TooltipCloseHandler = () => {
+    setTooltipOpen(false);
+  };
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -102,13 +111,13 @@ const Content = () => {
       e.preventDefault();
       dispatch(getData(searchInput));
       setSearchInput("");
-    }
+    } else setTooltipOpen(true);
   };
   const clickHandler = () => {
     if (searchInput) {
       dispatch(getData(searchInput));
       setSearchInput("");
-    } else setSearchInput("You should type your location here!");
+    } else setTooltipOpen(true);
   };
   return (
     <Grid container justify="center" className={classes.root}>
@@ -144,6 +153,8 @@ const Content = () => {
             handleInput={handleInput}
             clickHandler={clickHandler}
             onKeyClickHandler={onKeyClickHandler}
+            tooltipOpen={tooltipOpen}
+            TooltipCloseHandler={TooltipCloseHandler}
           />
         </Grid>
         <Grid item xs={6} sm={4} className={classes.languageIconWrapper}>
