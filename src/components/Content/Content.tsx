@@ -111,7 +111,7 @@ const Content = () => {
       e.preventDefault();
       dispatch(getData(searchInput));
       setSearchInput("");
-    } else setTooltipOpen(true);
+    } else if (e.key === "Enter" && !searchInput) setTooltipOpen(true);
   };
   const clickHandler = () => {
     if (searchInput) {
