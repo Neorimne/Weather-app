@@ -105,6 +105,7 @@ const Content = () => {
     e.preventDefault();
     setSearchInput(e.target.value);
     setChecked(false);
+    setTooltipOpen(false);
   };
   const onKeyClickHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchInput) {
