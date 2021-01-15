@@ -8,6 +8,7 @@ const fetchCitiesData = async (namePrefix: string) => {
       minPopulation: "100000",
       namePrefix,
       countryIds: "IT",
+      languageCode: "IT",
     },
     headers: {
       "x-rapidapi-key": GEO_DB_API.KEY,

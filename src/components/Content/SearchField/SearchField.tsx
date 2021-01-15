@@ -137,7 +137,7 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
         <Paper className={classes.root}>
           <Box className={classes.inputWrapper}>
             <input
-              placeholder="Search Forecast"
+              placeholder="Inserisci località"
               className={classes.input}
               value={searchInput}
               onChange={handleInput}

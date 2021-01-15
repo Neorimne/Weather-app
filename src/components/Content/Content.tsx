@@ -105,7 +105,7 @@ const Content = () => {
             variant="h6"
             className={classes.headerTitleWrapper}
           >
-            Simple Weather App
+            Previsione Meteo App
           </Typography>
         </Grid>
         <Grid

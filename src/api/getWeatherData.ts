@@ -3,6 +3,10 @@ import { WEATHER_API } from "../config";
 const getWeatherData = async (city: string) => {
   let result;
   const config = {
+    params: {
+      q: city,
+      lang: "it",
+    },
     headers: {
       "x-rapidapi-host": WEATHER_API.HOST,
       "x-rapidapi-key": WEATHER_API.KEY,
@@ -10,7 +14,7 @@ const getWeatherData = async (city: string) => {
   };
   try {
     result = await Axios.get(
-      `https://community-open-weather-map.p.rapidapi.com/weather?q=${city}`,
+      `https://community-open-weather-map.p.rapidapi.com/weather`,
       config
     );
   } catch (error) {

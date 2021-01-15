@@ -59,6 +59,9 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
   const classes = useStyles();
 
   if (searchResult.data) {
+    const weatherDecription =
+      searchResult.data.weather[0].description.charAt(0).toUpperCase() +
+      searchResult.data.weather[0].description.slice(1);
     return (
       <Grow in={checked} timeout={1000}>
         <Paper className={classes.root} elevation={3} variant="outlined">
@@ -97,13 +100,13 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
             </Grid>
             <Grid item className={classes.weatherInfoWrapper} xs={12}>
               <Typography paragraph color="textPrimary">
-                Feels like {searchResult.data.feelsLike} °C
+                Percepita {searchResult.data.feelsLike} °C
               </Typography>
               <Typography paragraph color="textPrimary">
-                {searchResult.data.weather[0].description}
+                {weatherDecription}
               </Typography>
               <Typography paragraph color="textPrimary">
-                Wind: {searchResult.data.wind} m/s
+                Vento: {searchResult.data.wind} m/s
               </Typography>
             </Grid>
           </Grid>
