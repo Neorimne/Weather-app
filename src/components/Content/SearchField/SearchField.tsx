@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   ClickAwayListener,
@@ -9,16 +9,12 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import { CitiesDataType } from "../../../redux/citiesReducer";
+import { citiesSelector, getCitiesData } from "../../../redux/citiesReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../../redux/searchDataReducer";
 
 type SearchFieldPropsType = {
-  value: string;
-  cities: Array<CitiesDataType> | undefined;
-  handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  clickHandler: () => void;
-  onKeyClickHandler: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  tooltipOpen: boolean;
-  TooltipCloseHandler: () => void;
+  setChecked: (value: React.SetStateAction<boolean>) => void;
 };
 
 const useStyles = makeStyles({
@@ -46,16 +42,45 @@ const useStyles = makeStyles({
   },
 });
 
-const SearchField = ({
-  value,
-  handleInput,
-  clickHandler,
-  cities,
-  onKeyClickHandler,
-  tooltipOpen,
-  TooltipCloseHandler,
-}: SearchFieldPropsType) => {
+const SearchField = ({ setChecked }: SearchFieldPropsType) => {
   const classes = useStyles();
+
+  const dispatch = useDispatch();
+  const [searchInput, setSearchInput] = useState("");
+
+  const cities = useSelector(citiesSelector);
+
+  useEffect(() => {
+    if (searchInput) {
+      dispatch(getCitiesData(searchInput));
+    }
+  }, [searchInput, dispatch]);
+
+  const [tooltipOpen, setTooltipOpen] = React.useState(false);
+  const TooltipCloseHandler = () => {
+    setTooltipOpen(false);
+  };
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setSearchInput(e.target.value);
+    setChecked(false);
+    setTooltipOpen(false);
+  };
+  const onKeyClickHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchInput) {
+      e.preventDefault();
+      dispatch(getData(searchInput));
+      setSearchInput("");
+    } else if (e.key === "Enter" && !searchInput) setTooltipOpen(true);
+  };
+  const clickHandler = () => {
+    if (searchInput) {
+      dispatch(getData(searchInput));
+      setSearchInput("");
+    } else setTooltipOpen(true);
+  };
+
   return (
     <ClickAwayListener onClickAway={TooltipCloseHandler}>
       <Tooltip
@@ -71,7 +96,7 @@ const SearchField = ({
             <input
               placeholder="Search Forecast"
               className={classes.input}
-              value={value}
+              value={searchInput}
               onChange={handleInput}
               list={"myInput"}
               onKeyDown={onKeyClickHandler}
