@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   ClickAwayListener,
@@ -9,9 +9,14 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import { citiesSelector, getCitiesData } from "../../../redux/citiesReducer";
+import {
+  CitiesDataType,
+  citiesSelector,
+  getCitiesData,
+} from "../../../redux/citiesReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../../redux/searchDataReducer";
+import throttle from "lodash/throttle";
 
 type SearchFieldPropsType = {
   setChecked: (value: React.SetStateAction<boolean>) => void;
@@ -19,6 +24,7 @@ type SearchFieldPropsType = {
 
 const useStyles = makeStyles({
   root: {
+    position: "relative",
     padding: "2px 0px",
     display: "flex",
     alignItems: "center",
@@ -40,6 +46,28 @@ const useStyles = makeStyles({
     margin: 5,
     backgroundColor: "black",
   },
+  autocompleteItemsContainer: {
+    marginTop: "1px",
+    position: "absolute",
+    border: "1px solid #d4d4d4",
+    borderBottom: "none",
+    borderTop: "none",
+    zIndex: 99,
+    /*position the autocomplete items to be the same width as the container:*/
+    top: "100%",
+    left: "0",
+    right: "0",
+  },
+  autocompleteItem: {
+    color: "black",
+    padding: "10px",
+    cursor: "pointer",
+    backgroundColor: "#fff",
+    borderBottom: "1px solid #d4d4d4",
+    "&:hover": {
+      backgroundColor: "#e9e9e9",
+    },
+  },
 });
 
 const SearchField = ({ setChecked }: SearchFieldPropsType) => {
@@ -47,14 +75,25 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
 
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState("");
+  const [cities, setCities] = useState<CitiesDataType[] | undefined>([]);
 
-  const cities = useSelector(citiesSelector);
+  const citiesData = useSelector(citiesSelector);
+
+  const fetch = useMemo(
+    () =>
+      throttle(() => {
+        console.log("Dispatch is happen!");
+        dispatch(getCitiesData(searchInput));
+      }, 3000),
+    [dispatch, searchInput]
+  );
 
   useEffect(() => {
-    if (searchInput) {
-      dispatch(getCitiesData(searchInput));
+    if (searchInput && searchInput.length > 2) {
+      fetch();
+      setCities(citiesData);
     }
-  }, [searchInput, dispatch]);
+  }, [citiesData, fetch, searchInput]);
 
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
   const TooltipCloseHandler = () => {
@@ -72,15 +111,19 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
       e.preventDefault();
       dispatch(getData(searchInput));
       setSearchInput("");
+      setCities([]);
     } else if (e.key === "Enter" && !searchInput) setTooltipOpen(true);
   };
   const clickHandler = () => {
     if (searchInput) {
       dispatch(getData(searchInput));
       setSearchInput("");
+      setCities([]);
     } else setTooltipOpen(true);
   };
-
+  const onSuggestClick = (event: any) => {
+    setSearchInput(event.currentTarget.textContent);
+  };
   return (
     <ClickAwayListener onClickAway={TooltipCloseHandler}>
       <Tooltip
@@ -101,17 +144,6 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
               list={"myInput"}
               onKeyDown={onKeyClickHandler}
             ></input>
-            <datalist id="myInput">
-              {cities ? (
-                cities.map((cityItem) => (
-                  <option key={cityItem.id}>
-                    {cityItem.city}, {cityItem.countryCode}
-                  </option>
-                ))
-              ) : (
-                <option></option>
-              )}
-            </datalist>
           </Box>
 
           <Divider className={classes.divider} orientation="vertical" />
@@ -124,6 +156,21 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
           >
             <SearchIcon />
           </IconButton>
+          <div className={classes.autocompleteItemsContainer}>
+            {cities ? (
+              cities.map((cityItem) => (
+                <div
+                  key={cityItem.id}
+                  className={classes.autocompleteItem}
+                  onClick={onSuggestClick}
+                >
+                  {cityItem.city}, {cityItem.countryCode}
+                </div>
+              ))
+            ) : (
+              <div />
+            )}
+          </div>
         </Paper>
       </Tooltip>
     </ClickAwayListener>

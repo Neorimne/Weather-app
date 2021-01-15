@@ -3,7 +3,12 @@ import { GEO_DB_API } from "../config";
 
 const fetchCitiesData = async (namePrefix: string) => {
   const options = {
-    params: { limit: "5", minPopulation: "50000", namePrefix },
+    params: {
+      limit: "5",
+      minPopulation: "100000",
+      namePrefix,
+      countryIds: "IT",
+    },
     headers: {
       "x-rapidapi-key": GEO_DB_API.KEY,
       "x-rapidapi-host": GEO_DB_API.HOST,
