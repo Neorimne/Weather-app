@@ -24,9 +24,11 @@ const initialState: IState = {
 
 export const getData = createAsyncThunk(
   "searchData/getData",
-  async (city: string) => {
+  async (city: string, thunkAPI) => {
     const response = await getWeatherData(city);
-    return response;
+    if (response.status === 404) {
+      return thunkAPI.rejectWithValue(response.data);
+    } else return response;
   }
 );
 
@@ -43,9 +45,9 @@ const searchDataSlice = createSlice({
         state.status = "succeeded";
         state.data = action.payload;
       })
-      .addCase(getData.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
+      .addCase(getData.rejected, (state, action: any) => {
+        state.status = "rejected";
+        state.error = action.payload.message;
       });
   },
 });

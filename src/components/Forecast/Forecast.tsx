@@ -1,5 +1,5 @@
 import React from "react";
-import { IState } from "../../../redux/searchDataReducer";
+import { IState } from "../../redux/searchDataReducer";
 import {
   Grid,
   Grow,
@@ -8,6 +8,7 @@ import {
   Typography,
   useTheme,
 } from "@material-ui/core";
+import NotFoundCity from "../ErrorMessages/NotFoundCity";
 
 type ForecastPropType = {
   searchResult: IState;
@@ -30,7 +31,6 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
         fontSize: "32px",
       },
     },
-    degreesWrapper: {},
     celsiusWrapper: {
       fontSize: "8vw",
       [theme.breakpoints.down("xs")]: {
@@ -58,7 +58,7 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
   });
   const classes = useStyles();
 
-  if (searchResult.data) {
+  if (searchResult.data && searchResult.status === "succeeded") {
     const weatherDecription =
       searchResult.data.weather[0].description.charAt(0).toUpperCase() +
       searchResult.data.weather[0].description.slice(1);
@@ -75,13 +75,7 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
                 {searchResult.data.city}
               </Typography>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              className={classes.degreesWrapper}
-              container
-              alignItems="center"
-            >
+            <Grid item xs={12} container alignItems="center">
               <Grid item xs={12} sm={6}>
                 <Typography
                   className={classes.celsiusWrapper}
@@ -113,9 +107,9 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
         </Paper>
       </Grow>
     );
-  } else {
-    return <></>;
-  }
+  } else if (searchResult.status === "rejected") {
+    return <NotFoundCity checked={checked} />;
+  } else return <></>;
 };
 
 export default Forecast;

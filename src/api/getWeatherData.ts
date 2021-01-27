@@ -19,9 +19,12 @@ const getWeatherData = async (city: string) => {
     );
   } catch (error) {
     console.log(error);
+    if (error.response.status === 404) {
+      return error.response;
+    }
   }
 
-  if (result && result.statusText === "OK") {
+  if (result && result.status === 200) {
     return {
       celsius: Math.round(result.data.main.temp - 273.15),
       feelsLike: Math.round(result.data.main.feels_like - 273.15),
@@ -29,8 +32,6 @@ const getWeatherData = async (city: string) => {
       weather: result.data.weather,
       wind: result.data.wind.speed,
     };
-  } else {
-    console.log("Something went wrong, error: ", result);
   }
 };
 

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import SearchField from "./SearchField/SearchField";
 import Forecast from "./Forecast/Forecast";
 import { useSelector } from "react-redux";
-import { getSearchData } from "../../redux/searchDataReducer";
+import { getSearchData } from "../redux/searchDataReducer";
 import LanguageIcon from "@material-ui/icons/Language";
 
-import cloudsLogo from "../../assets/clouds.png";
-import mistLogo from "../../assets/mist.png";
-import rainLogo from "../../assets/rain.png";
-import sunLogo from "../../assets/sun.png";
-import snowLogo from "../../assets/snow.png";
+import cloudsLogo from "../assets/clouds.png";
+import mistLogo from "../assets/mist.png";
+import rainLogo from "../assets/rain.png";
+import sunLogo from "../assets/sun.png";
+import snowLogo from "../assets/snow.png";
 
 import { Grid, makeStyles, Typography, useTheme } from "@material-ui/core";
 
@@ -39,7 +39,7 @@ const Content = () => {
         fontSize: "12px",
       },
     },
-    forecastWrapper: {},
+
     languageIcon: {
       color: "white",
     },
@@ -79,11 +79,11 @@ const Content = () => {
 
   // Transition
 
-  const [checked, setChecked] = useState(true);
+  const [checkedTransition, setCheckedTransition] = useState(true);
 
   useEffect(() => {
-    if (searchResult.status === "succeeded") {
-      setChecked(true);
+    if (searchResult.status === "succeeded" || "rejected") {
+      setCheckedTransition(true);
     }
   }, [searchResult.status]);
 
@@ -108,24 +108,18 @@ const Content = () => {
             Previsione Meteo App
           </Typography>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={4}
-          justify="center"
-          className={classes.searchFieldWrapper}
-        >
-          <SearchField setChecked={setChecked} />
+        <Grid item xs={12} sm={4} className={classes.searchFieldWrapper}>
+          <SearchField setChecked={setCheckedTransition} />
         </Grid>
         <Grid item xs={6} sm={4} className={classes.languageIconWrapper}>
           <LanguageIcon className={classes.languageIcon} />
         </Grid>
       </Grid>
-      <Grid item className={classes.forecastWrapper} xs={12} sm={10}>
+      <Grid item xs={12} sm={10}>
         <Forecast
           searchResult={searchResult}
           WeatherImg={WeatherImg}
-          checked={checked}
+          checked={checkedTransition}
         />
       </Grid>
     </Grid>

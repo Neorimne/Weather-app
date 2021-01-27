@@ -13,9 +13,9 @@ import {
   CitiesDataType,
   citiesSelector,
   getCitiesData,
-} from "../../../redux/citiesReducer";
+} from "../../redux/citiesReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../../../redux/searchDataReducer";
+import { getData } from "../../redux/searchDataReducer";
 import throttle from "lodash/throttle";
 
 type SearchFieldPropsType = {
@@ -53,7 +53,6 @@ const useStyles = makeStyles({
     borderBottom: "none",
     borderTop: "none",
     zIndex: 99,
-    /*position the autocomplete items to be the same width as the container:*/
     top: "100%",
     left: "0",
     right: "0",
@@ -79,10 +78,9 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
 
   const citiesData = useSelector(citiesSelector);
 
-  const fetch = useMemo(
+  const fetchCities = useMemo(
     () =>
       throttle(() => {
-        console.log("Dispatch is happen!");
         dispatch(getCitiesData(searchInput));
       }, 3000),
     [dispatch, searchInput]
@@ -90,12 +88,12 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
 
   useEffect(() => {
     if (searchInput && searchInput.length > 2) {
-      fetch();
+      fetchCities();
       setCities(citiesData);
     }
-  }, [citiesData, fetch, searchInput]);
+  }, [citiesData, fetchCities, searchInput]);
 
-  const [tooltipOpen, setTooltipOpen] = React.useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const TooltipCloseHandler = () => {
     setTooltipOpen(false);
   };
