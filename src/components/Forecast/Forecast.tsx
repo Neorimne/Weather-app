@@ -14,9 +14,15 @@ type ForecastPropType = {
   searchResult: IState;
   WeatherImg: string | undefined;
   checked: boolean;
+  celsiusScale: boolean;
 };
 
-const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
+const Forecast = ({
+  searchResult,
+  WeatherImg,
+  checked,
+  celsiusScale,
+}: ForecastPropType) => {
   const theme = useTheme();
   const useStyles = makeStyles({
     root: {
@@ -81,7 +87,9 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
                   className={classes.celsiusWrapper}
                   color="textPrimary"
                 >
-                  {searchResult.data.celsius}°C
+                  {celsiusScale
+                    ? searchResult.data.celsius + " ℃"
+                    : (searchResult.data.celsius * 9) / 5 + 32 + " °F"}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} className={classes.imgWrapper}>
@@ -94,7 +102,10 @@ const Forecast = ({ searchResult, WeatherImg, checked }: ForecastPropType) => {
             </Grid>
             <Grid item className={classes.weatherInfoWrapper} xs={12}>
               <Typography paragraph color="textPrimary">
-                Percepita {searchResult.data.feelsLike} °C
+                Percepita{" "}
+                {celsiusScale
+                  ? searchResult.data.feelsLike + " ℃"
+                  : (searchResult.data.feelsLike * 9) / 5 + 32 + " °F"}
               </Typography>
               <Typography paragraph color="textPrimary">
                 {weatherDecription}

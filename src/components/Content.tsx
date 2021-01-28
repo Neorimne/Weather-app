@@ -3,7 +3,6 @@ import SearchField from "./SearchField/SearchField";
 import Forecast from "./Forecast/Forecast";
 import { useSelector } from "react-redux";
 import { getSearchData } from "../redux/searchDataReducer";
-import LanguageIcon from "@material-ui/icons/Language";
 
 import cloudsLogo from "../assets/clouds.png";
 import mistLogo from "../assets/mist.png";
@@ -11,7 +10,14 @@ import rainLogo from "../assets/rain.png";
 import sunLogo from "../assets/sun.png";
 import snowLogo from "../assets/snow.png";
 
-import { Grid, makeStyles, Typography, useTheme } from "@material-ui/core";
+import {
+  Button,
+  ButtonGroup,
+  Grid,
+  makeStyles,
+  Typography,
+  useTheme,
+} from "@material-ui/core";
 
 const Content = () => {
   //// Styles
@@ -48,6 +54,8 @@ const Content = () => {
   const classes = useStyles();
 
   const searchResult = useSelector(getSearchData);
+
+  const [celsiusScale, setScale] = useState(true);
 
   // Weather Icon switch
 
@@ -112,7 +120,28 @@ const Content = () => {
           <SearchField setChecked={setCheckedTransition} />
         </Grid>
         <Grid item xs={6} sm={4} className={classes.languageIconWrapper}>
-          <LanguageIcon className={classes.languageIcon} />
+          <ButtonGroup
+            color="primary"
+            aria-label="outlined primary button group"
+            variant="contained"
+          >
+            <Button
+              style={celsiusScale ? { border: "2px solid blue" } : {}}
+              onClick={() => {
+                setScale(true);
+              }}
+            >
+              ℃
+            </Button>
+            <Button
+              style={!celsiusScale ? { border: "2px solid blue" } : {}}
+              onClick={() => {
+                setScale(false);
+              }}
+            >
+              °F
+            </Button>
+          </ButtonGroup>
         </Grid>
       </Grid>
       <Grid item xs={12} sm={10}>
@@ -120,6 +149,7 @@ const Content = () => {
           searchResult={searchResult}
           WeatherImg={WeatherImg}
           checked={checkedTransition}
+          celsiusScale={celsiusScale}
         />
       </Grid>
     </Grid>

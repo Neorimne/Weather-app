@@ -125,7 +125,7 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
   return (
     <ClickAwayListener onClickAway={TooltipCloseHandler}>
       <Tooltip
-        title="You should type location here!"
+        title="Dovresti inserire località qui!"
         arrow
         open={tooltipOpen}
         disableFocusListener
@@ -135,7 +135,7 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
         <Paper className={classes.root}>
           <Box className={classes.inputWrapper}>
             <input
-              placeholder="Inserisci località"
+              placeholder="Cerca città!"
               className={classes.input}
               value={searchInput}
               onChange={handleInput}
