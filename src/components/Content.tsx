@@ -18,6 +18,7 @@ import {
   Typography,
   useTheme,
 } from "@material-ui/core";
+import RecentPlaces from "./RecentPlaces/RecentPlaces";
 
 const Content = () => {
   //// Styles
@@ -81,7 +82,7 @@ const Content = () => {
         WeatherImg = snowLogo;
         break;
       default:
-        WeatherImg = sunLogo;
+        WeatherImg = cloudsLogo;
     }
   }
 
@@ -143,6 +144,9 @@ const Content = () => {
             </Button>
           </ButtonGroup>
         </Grid>
+      </Grid>
+      <Grid item xs={12} sm={10}>
+        <RecentPlaces searchResultStatus={searchResult.status} />
       </Grid>
       <Grid item xs={12} sm={10}>
         <Forecast

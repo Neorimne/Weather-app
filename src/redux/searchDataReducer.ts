@@ -1,6 +1,7 @@
 import getWeatherData from "../api/getWeatherData";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./rootReducer";
+import localStorageHandler from "../utils/localStorageHandler";
 
 type DataType = {
   celsius: number;
@@ -13,12 +14,14 @@ type DataType = {
 export interface IState {
   data: DataType | undefined;
   status: string;
+  recentCities: Array<string | null>;
   error: string | undefined;
 }
 
 const initialState: IState = {
   data: undefined,
   status: "idle",
+  recentCities: [],
   error: undefined,
 };
 
@@ -44,6 +47,7 @@ const searchDataSlice = createSlice({
       .addCase(getData.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        localStorageHandler(action, state);
       })
       .addCase(getData.rejected, (state, action: any) => {
         state.status = "rejected";
@@ -53,5 +57,7 @@ const searchDataSlice = createSlice({
 });
 
 export const getSearchData = (state: RootState) => state.searchData;
+export const getRecentCities = (state: RootState) =>
+  state.searchData.recentCities;
 
 export default searchDataSlice.reducer;

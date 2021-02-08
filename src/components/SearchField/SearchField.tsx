@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   ClickAwayListener,
@@ -78,39 +78,40 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
 
   const citiesData = useSelector(citiesSelector);
 
-  const fetchCities = useMemo(
-    () =>
-      throttle(() => {
-        dispatch(getCitiesData(searchInput));
-      }, 3000),
-    [dispatch, searchInput]
+  const throttled = useCallback(
+    throttle((searchInput) => {
+      dispatch(getCitiesData(searchInput));
+    }, 850),
+    []
   );
-
   useEffect(() => {
     if (searchInput && searchInput.length > 2) {
-      fetchCities();
-      setCities(citiesData);
+      throttled(searchInput);
     }
-  }, [citiesData, fetchCities, searchInput]);
+  }, [throttled, searchInput]);
+
+  useEffect(() => {
+    setCities(citiesData);
+  }, [citiesData]);
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const TooltipCloseHandler = () => {
     setTooltipOpen(false);
   };
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSearchInput(e.target.value);
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setSearchInput(event.target.value);
     setChecked(false);
     setTooltipOpen(false);
   };
-  const onKeyClickHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && searchInput) {
-      e.preventDefault();
+  const onKeyClickHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && searchInput) {
+      event.preventDefault();
       dispatch(getData(searchInput));
       setSearchInput("");
       setCities([]);
-    } else if (e.key === "Enter" && !searchInput) setTooltipOpen(true);
+    } else if (event.key === "Enter" && !searchInput) setTooltipOpen(true);
   };
   const clickHandler = () => {
     if (searchInput) {
@@ -119,8 +120,9 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
       setCities([]);
     } else setTooltipOpen(true);
   };
-  const onSuggestClick = (event: any) => {
-    setSearchInput(event.currentTarget.textContent);
+  const onSuggestClick = (event: React.MouseEvent) => {
+    if (event.currentTarget.textContent)
+      setSearchInput(event.currentTarget.textContent);
   };
   return (
     <ClickAwayListener onClickAway={TooltipCloseHandler}>
@@ -139,7 +141,6 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
               className={classes.input}
               value={searchInput}
               onChange={handleInput}
-              list={"myInput"}
               onKeyDown={onKeyClickHandler}
             ></input>
           </Box>
