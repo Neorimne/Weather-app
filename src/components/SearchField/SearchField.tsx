@@ -78,7 +78,7 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
 
   const citiesData = useSelector(citiesSelector);
 
-  const throttled = useCallback(
+  const throttledFetchSuggestCities = useCallback(
     throttle((searchInput) => {
       dispatch(getCitiesData(searchInput));
     }, 850),
@@ -86,9 +86,9 @@ const SearchField = ({ setChecked }: SearchFieldPropsType) => {
   );
   useEffect(() => {
     if (searchInput && searchInput.length > 2) {
-      throttled(searchInput);
+      throttledFetchSuggestCities(searchInput);
     }
-  }, [throttled, searchInput]);
+  }, [throttledFetchSuggestCities, searchInput]);
 
   useEffect(() => {
     setCities(citiesData);
