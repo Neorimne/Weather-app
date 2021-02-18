@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SearchField from "./SearchField/SearchField";
 import Forecast from "./Forecast/Forecast";
-import { useSelector } from "react-redux";
-import { getSearchData } from "../redux/searchDataReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { getData, getSearchData } from "../redux/searchDataReducer";
 
 import cloudsLogo from "../assets/clouds.png";
 import mistLogo from "../assets/mist.png";
@@ -19,6 +19,8 @@ import {
   useTheme,
 } from "@material-ui/core";
 import RecentPlaces from "./RecentPlaces/RecentPlaces";
+import usePosition from "../utils/usePosition";
+import getCityByGeo from "../api/getCityByGeo";
 
 const Content = () => {
   //// Styles
@@ -52,11 +54,30 @@ const Content = () => {
     },
   });
 
+  const dispatch = useDispatch();
+
   const classes = useStyles();
 
   const searchResult = useSelector(getSearchData);
 
   const [celsiusScale, setScale] = useState(true);
+
+  const { latitude, longitude, error }: any = usePosition();
+
+  useEffect(() => {
+    async function dispatchGeoFunction() {
+      const cityByGeoData = await getCityByGeo(latitude, longitude);
+      if (cityByGeoData) {
+        const cityByGeo = cityByGeoData.data[0].city;
+        dispatch(getData(cityByGeo));
+      }
+    }
+    if (!error && latitude && longitude) {
+      dispatchGeoFunction();
+    } else if (error) {
+      console.log("Error with geo: ", error);
+    }
+  }, [error, latitude, longitude, dispatch]);
 
   // Weather Icon switch
 

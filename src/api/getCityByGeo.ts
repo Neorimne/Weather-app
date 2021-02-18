@@ -1,12 +1,13 @@
 import Axios from "axios";
 import { GEO_DB_API } from "../config";
 
-const fetchCitiesData = async (namePrefix: string) => {
+const getCityByGeo = async (latitude: number, longitude: number) => {
   const options = {
     params: {
-      limit: "5",
+      limit: "1",
       minPopulation: "50000",
-      namePrefix,
+      location: `+${latitude}+${longitude}`,
+      radius: "10",
       countryIds: "IT",
       languageCode: "IT",
       sort: "population",
@@ -25,8 +26,7 @@ const fetchCitiesData = async (namePrefix: string) => {
   } catch (error) {
     console.log("Error on request", error);
   }
-
   if (response) return response.data;
 };
 
-export default fetchCitiesData;
+export default getCityByGeo;
