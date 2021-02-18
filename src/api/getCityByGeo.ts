@@ -5,12 +5,12 @@ const getCityByGeo = async (latitude: number, longitude: number) => {
   const options = {
     params: {
       limit: "1",
-      minPopulation: "50000",
+      minPopulation: "30000",
       location: `+${latitude}+${longitude}`,
-      radius: "10",
+      radius: "5",
       countryIds: "IT",
       languageCode: "IT",
-      sort: "population",
+      sort: "elevation",
     },
     headers: {
       "x-rapidapi-key": GEO_DB_API.KEY,
@@ -26,6 +26,7 @@ const getCityByGeo = async (latitude: number, longitude: number) => {
   } catch (error) {
     console.log("Error on request", error);
   }
+
   if (response) return response.data;
 };
 
